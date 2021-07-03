@@ -191,9 +191,11 @@ using namespace std;
 
 
 
+void autoKomi();
 
 
 int MainCmds::sandbox() {
+  autoKomi();
   // Rand rand;
   // while(true) {
   //   uint32_t x[16];
@@ -2044,3 +2046,64 @@ int MainCmds::sandbox() {
 
 //   return 0;
 // }
+
+#include "../command/commandline.h"
+#include "../program/setup.h"
+#include "../program/play.h"
+#include "../program/playutils.h"
+#include <string>
+
+void autoKomi() {
+  Board::initHash();
+  ScoreValue::initTables();
+  string seed = "Test";
+  Rand seedRand("Test");
+  ConfigParser cfg;
+  cfg.initialize("/Users/haodafu/Documents/Files/KataGoProjectDocs/Config/9x9MutlibotsVariOpen.cfg");
+  vector<SearchParams> paramss = Setup::loadParams(cfg,Setup::SETUP_FOR_MATCH);
+  int numBots = (int)paramss.size();
+
+  int defaultMaxBatchSize = -1;
+  const vector<string> expectedSha256s;
+  Logger logger;
+  logger.addFile("/Users/haodafu/Documents/Files/Temp/9x9match/log.log");
+  int maxBoardSizeUsed = 9;
+  int maxConcurrentEvals = 5;
+  int expectedConcurrentEvals = 5;
+
+  vector<string> nnModelFiles;
+  vector<string> nnModelNames;
+  for(int i=0;i<numBots; i++) {
+    nnModelFiles.push_back("/Users/haodafu/Documents/CodeDev/KataGo/cpp/docs/model/katamodel.bin.gz");
+    nnModelNames.push_back(std::to_string(i));
+  }
+
+  vector<NNEvaluator*> nnEvals = Setup::initializeNNEvaluators(
+      nnModelNames,nnModelFiles,expectedSha256s,cfg,logger,seedRand,maxConcurrentEvals,expectedConcurrentEvals,
+      maxBoardSizeUsed,maxBoardSizeUsed,defaultMaxBatchSize,
+      Setup::SETUP_FOR_MATCH
+  );
+
+  int plaB = 1;
+  int plaW = 2;
+  Search* botB = new Search(paramss[plaB], nnEvals[plaB], &logger, seed + "@B");
+  Search* botW = new Search(paramss[plaW], nnEvals[plaW], &logger, seed + "@W");
+
+  Player pla = P_BLACK;
+  Board board(9,9);
+  BoardHistory hist(board,pla,Rules::getTrompTaylorish(),0);
+  int numVisits = 100;
+  OtherGameProperties otherGameProps;
+
+  float oldKomi = hist.rules.komi;
+
+  PlayUtils::adjustKomiToEven(botB, botW, board, hist, pla, numVisits, otherGameProps, seedRand);
+
+  float newKomi = hist.rules.komi;
+
+  for(int i=0;i<numBots; i++) {
+    delete nnEvals[i];
+  }
+  delete botB;
+  delete botW;
+}
