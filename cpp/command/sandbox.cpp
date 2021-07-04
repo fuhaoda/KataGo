@@ -2101,14 +2101,18 @@ void autoKomi() {
 .........
 .........
 )%%");
-  BoardHistory hist(board,pla,Rules::getTrompTaylorish(),0);
+  auto rules = Rules::getTrompTaylorish();
+  rules.koRule = Rules::KO_POSITIONAL;
+  rules.scoringRule = Rules::SCORING_TERRITORY;
+  rules.taxRule = Rules::TAX_ALL;
+  rules.multiStoneSuicideLegal = false;
+
+  BoardHistory hist(board,pla,rules,0);
+
   int numVisits = 100;
   OtherGameProperties otherGameProps;
 
-  hist.rules.koRule = Rules::KO_POSITIONAL;
-  hist.rules.scoringRule = Rules::SCORING_TERRITORY;
-  hist.rules.taxRule = Rules::TAX_ALL;
-  hist.rules.multiStoneSuicideLegal = false;
+
 
   for (int i = 0; i < 100000; i++){
     hist.rules.komi =  7.5;
