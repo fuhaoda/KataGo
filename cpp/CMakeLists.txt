@@ -456,7 +456,7 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang
     if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 6.1)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnull-dereference -Walloc-zero -Wduplicated-branches -Wduplicated-cond -Wdangling-else -Wrestrict")
     endif()
-  elseif(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
+  elseif(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang1")
     message(STATUS "Enabling AppleClang-specific build options.")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnull-dereference -Wdangling-else")
   else()

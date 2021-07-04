@@ -2095,13 +2095,26 @@ void autoKomi() {
   int numVisits = 100;
   OtherGameProperties otherGameProps;
 
-  float oldKomi = hist.rules.komi;
+  hist.rules.koRule = Rules::KO_POSITIONAL;
+  hist.rules.scoringRule = Rules::SCORING_TERRITORY;
+  hist.rules.taxRule = Rules::TAX_ALL;
+  hist.rules.multiStoneSuicideLegal = false;
 
-  PlayUtils::adjustKomiToEven(botB, botW, board, hist, pla, numVisits, otherGameProps, seedRand);
+  for (int i = 0; i < 100000; i++){
+    hist.rules.komi =  7.5;
+    PlayUtils::adjustKomiToEven(botB, botW, board, hist, pla, numVisits, otherGameProps, seedRand);
+    float newKomi = hist.rules.komi;
+    if (i % 1000 == 0) {
+      cout << "Sim iter:"<< i <<  "Komi:" << newKomi << endl;
+    }
+    if (newKomi < 6.1 || newKomi > 7.9) {
+      cout << i << endl;
+      cout << "WOWOWOWOWWOW:" << newKomi << endl;
+    }
+  }
 
-  float newKomi = hist.rules.komi;
 
-  for(int i=0;i<numBots; i++) {
+  for(int i = 0;i < numBots; i++) {
     delete nnEvals[i];
   }
   delete botB;
