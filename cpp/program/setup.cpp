@@ -436,8 +436,8 @@ vector<SearchParams> Setup::loadParams(
     if(cfg.contains("newPUCTExploration"+idxStr)) params.newPUCTExploration = cfg.getBool("newPUCTExploration"+idxStr);
     else if(cfg.contains("newPUCTExploration"))   params.newPUCTExploration = cfg.getDouble("newPUCTExploration");
     else params.newPUCTExploration = false;
-    if(cfg.contains("newPUCTExplorationCPUCTAdjustment"+idxStr)) params.newPUCTExplorationCPUCTAdjustment = cfg.getDouble("newPUCTExplorationCPUCTAdjustment"+idxStr, 0.0, 1.0);
-    else if(cfg.contains("newPUCTExplorationCPUCTAdjustment"))   params.newPUCTExplorationCPUCTAdjustment = cfg.getDouble("newPUCTExplorationCPUCTAdjustment",        0.0, 1.0);
+    if(cfg.contains("newPUCTExplorationCPUCTAdjustment"+idxStr)) params.newPUCTExplorationCPUCTAdjustment = cfg.getDouble("newPUCTExplorationCPUCTAdjustment"+idxStr, 0.0, 100.0);
+    else if(cfg.contains("newPUCTExplorationCPUCTAdjustment"))   params.newPUCTExplorationCPUCTAdjustment = cfg.getDouble("newPUCTExplorationCPUCTAdjustment",        0.0, 100.0);
     else params.newPUCTExplorationCPUCTAdjustment = 0.7;
 
 
