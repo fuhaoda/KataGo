@@ -433,6 +433,13 @@ vector<SearchParams> Setup::loadParams(
     else if(cfg.contains("cpuctUtilityStdevScale"))   params.cpuctUtilityStdevScale = cfg.getDouble("cpuctUtilityStdevScale",        0.0, 1.0);
     else                                              params.cpuctUtilityStdevScale = ((setupFor != SETUP_FOR_DISTRIBUTED && setupFor != SETUP_FOR_OTHER) ? 0.85 : 0.0);
 
+    if(cfg.contains("newPUCTExploration"+idxStr)) params.newPUCTExploration = cfg.getBool("newPUCTExploration"+idxStr);
+    else if(cfg.contains("newPUCTExploration"))   params.newPUCTExploration = cfg.getDouble("newPUCTExploration");
+    else params.newPUCTExploration = false;
+    if(cfg.contains("newPUCTExplorationCPUCTAdjustment"+idxStr)) params.newPUCTExplorationCPUCTAdjustment = cfg.getDouble("newPUCTExplorationCPUCTAdjustment"+idxStr, 0.0, 1.0);
+    else if(cfg.contains("newPUCTExplorationCPUCTAdjustment"))   params.newPUCTExplorationCPUCTAdjustment = cfg.getDouble("newPUCTExplorationCPUCTAdjustment",        0.0, 1.0);
+    else params.newPUCTExplorationCPUCTAdjustment = 0.7;
+
 
     if(cfg.contains("fpuReductionMax"+idxStr)) params.fpuReductionMax = cfg.getDouble("fpuReductionMax"+idxStr, 0.0, 2.0);
     else if(cfg.contains("fpuReductionMax"))   params.fpuReductionMax = cfg.getDouble("fpuReductionMax",        0.0, 2.0);

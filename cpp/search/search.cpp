@@ -2196,13 +2196,19 @@ double Search::getExploreSelectionValue(
 ) const {
   if(nnPolicyProb < 0)
     return POLICY_ILLEGAL_SELECTION_VALUE;
-
   double exploreComponent =
-    cpuctExploration(totalChildWeight,searchParams)
-    * parentUtilityStdevFactor
-    * nnPolicyProb
-    * sqrt(totalChildWeight + TOTALCHILDWEIGHT_PUCT_OFFSET)
-    / (1.0 + childWeight);
+      cpuctExploration(totalChildWeight,searchParams)
+          * parentUtilityStdevFactor
+          * nnPolicyProb;
+  if (searchParams.newPUCTExploration) {
+    exploreComponent *= searchParams.newPUCTExplorationCPUCTAdjustment
+            * sqrt(sqrt(totalChildWeight + TOTALCHILDWEIGHT_PUCT_OFFSET)
+            / (1.0 + childWeight));
+  } else {
+        exploreComponent *=
+            sqrt(totalChildWeight + TOTALCHILDWEIGHT_PUCT_OFFSET)
+            / (1.0 + childWeight);
+  }
 
   //At the last moment, adjust value to be from the player's perspective, so that players prefer values in their favor
   //rather than in white's favor

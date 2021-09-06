@@ -19,6 +19,8 @@ SearchParams::SearchParams()
    cpuctUtilityStdevPrior(0.25),
    cpuctUtilityStdevPriorWeight(1.0),
    cpuctUtilityStdevScale(0.0),
+   newPUCTExploration(false),
+   newPUCTExplorationCPUCTAdjustment(0.7),
    fpuReductionMax(0.2),
    fpuLossProp(0.0),
    fpuParentWeight(0.0),

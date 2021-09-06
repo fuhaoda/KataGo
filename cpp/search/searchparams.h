@@ -27,6 +27,9 @@ struct SearchParams {
   double fpuLossProp; //Scale fpu this proportion of the way towards assuming a move is a loss.
   double fpuParentWeight; //For fpu, 0 = use parent average, 1 = use parent nn value, interpolates between.
 
+  bool newPUCTExploration;
+  double newPUCTExplorationCPUCTAdjustment;
+
   //Tree value aggregation parameters
   double valueWeightExponent; //Amount to apply a downweighting of children with very bad values relative to good ones
   bool useNoisePruning; //For computation of value, prune out weight that greatly exceeds what is justified by policy prior
