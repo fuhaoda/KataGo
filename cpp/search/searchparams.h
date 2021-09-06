@@ -23,12 +23,12 @@ struct SearchParams {
   double cpuctUtilityStdevPriorWeight;
   double cpuctUtilityStdevScale;
 
+  bool newPUCTExploration;
+  double newPUCTExplorationCPUCTAdjustment;
+
   double fpuReductionMax;   //Max amount to reduce fpu value for unexplore children
   double fpuLossProp; //Scale fpu this proportion of the way towards assuming a move is a loss.
   double fpuParentWeight; //For fpu, 0 = use parent average, 1 = use parent nn value, interpolates between.
-
-  bool newPUCTExploration;
-  double newPUCTExplorationCPUCTAdjustment;
 
   //Tree value aggregation parameters
   double valueWeightExponent; //Amount to apply a downweighting of children with very bad values relative to good ones
