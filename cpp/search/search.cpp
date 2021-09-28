@@ -2202,8 +2202,8 @@ double Search::getExploreSelectionValue(
           * nnPolicyProb;
   if (searchParams.newPUCTExploration) {
     exploreComponent *= searchParams.newPUCTExplorationCPUCTAdjustment
-            * sqrt(sqrt(totalChildWeight + TOTALCHILDWEIGHT_PUCT_OFFSET)
-            / (1.0 + childWeight));
+            * sqrt(totalChildWeight + TOTALCHILDWEIGHT_PUCT_OFFSET)
+            / (1.0 + childWeight);
   } else {
         exploreComponent *=
             sqrt(totalChildWeight + TOTALCHILDWEIGHT_PUCT_OFFSET)
@@ -2953,6 +2953,12 @@ void Search::recomputeNodeStats(SearchNode& node, SearchThread& thread, int numV
     const NodeStats& stats = statsBuf[i].stats;
 
     double desiredWeight = statsBuf[i].weightAdjusted;
+    if (searchParams.newPUCTExploration){
+      const NNOutput* nnOutput = node.getNNOutput();
+      const float* policyProbs = nnOutput->getPolicyProbsMaybeNoised();
+      double policyProb = std::max(1e-30, (double)policyProbs[getPos(statsBuf[i].prevMoveLoc)]);
+      desiredWeight = desiredWeight*policyProb;
+    }
     double weightScaling = desiredWeight / stats.weightSum;
 
     winLossValueSum += desiredWeight * stats.winLossValueAvg;
